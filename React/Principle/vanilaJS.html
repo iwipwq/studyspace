@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <span>total clicks : 0</span>
+    <button id="btn">count!</button>
+    <script>
+        let counter = 0;
+        const span = document.querySelector("span")
+        const button = document.querySelector("#btn");
+        function handleClick() {
+            counter += 1
+            span.innerText = `total clicks : ${counter}`;
+        }
+        button.addEventListener("click",handleClick)
+    </script>
+</body>
+</html>
