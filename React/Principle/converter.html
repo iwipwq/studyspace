@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        const root = document.getElementById("root");
+        function App () {
+            // 0,"",()
+            const [minutes, setMinutes] = React.useState()
+            const [flipped, setFlipped] = React.useState(false);
+            const onChange = (event) => {
+                console.log("wrote")
+                console.log(event.target.value)
+                setMinutes(event.target.value)
+            }
+            const onFlip = () => setFlipped((current)=>!current)
+            const reset = () => setMinutes(0);
+            return (
+                <div>
+                    <div>
+                        <h1 className="title">Converter</h1>
+                        <label htmlFor="minutes">Minutes</label>
+                        <input value={minutes} id="minutes" type="number" placeholder="Minutes" onChange={onChange} disabled={flipped === true}/>
+                        <p>you want to convert {minutes}</p>
+                    </div>
+                    <div>
+                        <label htmlFor="hours">Hours</label>
+                        <input value={Math.round(minutes/60)} id="hours" type="number" placeholder="Hours" disabled={flipped === false}/>
+                    </div>
+                    <button onClick={reset}>Reset</button>
+                    <button onClick={onFlip}>Flip</button>
+                </div>  
+            )
+        }
+        ReactDOM.render(<App />, root);
+    </script>
+</html>

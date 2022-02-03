@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        const root = document.getElementById("root");
+        function App () {
+            let [counter, setCounter] = React.useState(0);
+            const onClick = () => {
+                // set new value
+                // setCounter(newvalue)
+                // setCounter(counter + 1);
+                
+                //depending on previous value (more safety, prevent unexpected updates)
+                //first argument == current value
+                //return of this function will be new state 
+                setCounter(current => current + 1);
+                
+            }
+            return (
+                <div>
+                    <h3>Total clicks: {counter}</h3>
+                    <button onClick={onClick}>Click me</button>
+                </div>  
+            )
+        }
+        ReactDOM.render(<App />, root);
+    </script>
+</html>
