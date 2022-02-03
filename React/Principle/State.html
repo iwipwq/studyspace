@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        const root = document.getElementById("root");
+        // same as using state
+        // let counter = 0;
+        // function countUp() {
+        //     //code
+        // }
+        //const counter = data[0]
+        //const modifier = data[1]
+        function App () {
+            // let [counter, modifier] = React.useState(0);
+            let [counter, setCounter] = React.useState(0);
+            const onClick = () => {
+                // same as modifier()
+                // counter += 1;
+                // console.log(counter);
+                // ReactDOM.render(<App />, root);
+                setCounter(counter + 1);
+            }
+            console.log("rerender");
+            console.log(counter);
+            // const data = React.useState(0);
+            // console.log(data);
+            return (
+                <div>
+                    <h3>Total clicks: {counter}</h3>
+                    <button onClick={onClick}>Click me</button>
+                </div>  
+            )
+        }
+        ReactDOM.render(<App />, root);
+    </script>
+</html>
