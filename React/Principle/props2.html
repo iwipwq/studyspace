@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        //take a property outside of an object
+        //props.mySyntex
+        function Btn({mySyntex,big}){
+            console.log(props)
+            console.log(big)
+            return <button
+            style={{
+                backgroundColor:"purple",
+                color: "white",
+                border: "none",
+                borderRadius: "10px",
+                padding: "10px 20px",
+                fontSize: big ? 18 : 16, 
+                }}
+            >{mySyntex}</button>;
+        }
+        
+        function App () {
+            return (
+                <div>
+                    
+                    <Btn mySyntex="Save Chnages" big={true} />
+                    <Btn mySyntex="Continue" big={false} />
+                </div>  
+            );
+        }
+        const root = document.getElementById("root");
+        ReactDOM.render(<App />, root);
+    </script>
+</html>
