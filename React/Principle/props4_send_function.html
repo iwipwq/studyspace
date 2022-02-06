@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        //take a property outside of an object
+        //props.mySyntex
+        //여기에 있는 HTML요소 <button>에 onClick을 달 경우 그건 이벤트리스너
+        function Btn({mySyntex, changeValue}){
+            console.log(props)
+            console.log(mySyntex,"was rendered")
+            return <button
+            onClick={changeValue}
+            style={{
+                backgroundColor:"purple",
+                color: "white",
+                border: "none",
+                borderRadius: 10,
+                padding: "10px 20px",
+                fontSize: 16, 
+                }}
+            >{mySyntex}</button>;
+        }
+        
+        function App () {
+            const [value, setValue] =React.useState("Save Changes")
+            const changeValue = () => setValue("Revert Changes")
+            //이 컴포넌트의 state가 바뀔때마다 return 안의 값들이 새로 렌더링됨
+            //여기서 Btn이라는 커스텀 컴포넌트에 들어간 onClick은 이벤트리스너가 아닌 props 역할을 함
+            //예를들어 여기에 style={{color:red}}을 사용해도 작동하지 않음
+            return (
+                <div>
+                    <Btn mySyntex={value} chnageValue={changeValue}/>
+                    <Btn mySyntex="Continue"  />
+                </div>  
+            );
+        }
+        const root = document.getElementById("root");
+        ReactDOM.render(<App />, root);
+    </script>
+</html>
