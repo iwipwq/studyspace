@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/prop-types@15.6/prop-types.min.js"></script>
+    <script type="text/babel">
+        //App()에서 fontSize 설정 후 여기에 argument로 받아오기
+        //fontSize : fontSize -> fontSize로 줄여서 쓸 수 있음
+        //<MemorizedBtn mySyntex={18} fontSize={"Save Changes"}/> 이런식으로 값을 잘못 보낸다면?
+        //syntex상에서는 맞미나 컴포넌트상 에러임 -> 리액트가 감지하지 못함
+        //React팀에서 나온 proptypes라는 prop타입을 갑지해주는 패키지가 있음
+        //콘솔에 propTypes라고 치고 실행해보기
+        // fontSize = 16 -> 기본값을 16으로 설정해준 것 (undefined에서 16으로바뀜)
+        // 이런경우 fontSize를 prop으로 갖고 있지 않은 컴포넌트들에게 기본값으로 16이 적용됨
+        function Btn({mySyntex, changeValue, fontSize = 16}){
+            console.log(props)
+            console.log(mySyntex,"was rendered")
+            return <button
+            onClick={changeValue}
+            style={{
+                backgroundColor:"purple",
+                color: "white",
+                border: "none",
+                borderRadius: 10,
+                padding: "10px 20px",
+                fontSize,
+                }}
+            >{mySyntex}</button>;
+        }
+        const MemorizedBtn = React.memo(Btn)
+        Btn.propTypes = {
+            //이 안에 프롭타입이 어떤타입이고 형태여야 하는지 설명을 적어주자
+            // text: PropTypes.string,
+            text: PropTypes.string.isRequired,
+            fontSize: PropTypes.number,
+            // fontSize: PropTypes.number.isRequired,
+            //이렇게 하면 코드가 유효하더라도 프롭타입이 다르면 콘솔로 경고해줌
+            //리액트문서에 가보면 다양한 옵션을 제공하고 있음
+            //isRequired : 컴포넌트가 확실하게 정해진 prop만 전하고 있다면 사용하는 옵션
+        }
+        function App () {
+            const [value, setValue] =React.useState("Save Changes")
+            const changeValue = () => setValue("Revert Changes")
+            return (
+                <div>
+                    <MemorizedBtn mySyntex="Save Changes" fontSize={18}/>
+                    <MemorizedBtn mySyntex="Save Changes" />
+                    <MemorizedBtn mySyntex={value} chnageValue={changeValue}/>
+                    <MemorizedBtn mySyntex="Continue"  />
+                </div>  
+            );
+        }
+        const root = document.getElementById("root");
+        ReactDOM.render(<App />, root);
+    </script>
+</html>
