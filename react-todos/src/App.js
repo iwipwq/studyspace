@@ -13,8 +13,10 @@ function App() {
     }
     // toDo = "" ---> X
     // todo.push(...) ---> X
-
+    
+    console.log("before1",toDo);
     setToDo("");
+    console.log("before2",toDo);
     //state는 항상 새로운 것이여야 한다.
     setToDos(currentArray => [toDo, ...currentArray])
     //첫번재 실행시 "hello" 입력
@@ -27,8 +29,11 @@ function App() {
     // setToDos(["hello"]) => ["bye bye","hello"]
     console.log("something to do")
     // localStorage.setItem(list,toDo)
+    console.log("after",toDo);
   }
+  console.log("after2",toDo);
   console.log("my todos array",toDos)
+  console.log(toDos.map((item,index)=>(<li key={index}>{item}</li>)))
   return (
     <div>
       <h1>My to Dos {(toDos.length)}</h1>
@@ -36,6 +41,10 @@ function App() {
         <input onChange={onChange} value={toDo} type="text" placeholder="Write your to do..."/>
         <button>Add To Do</button>
       </form>
+      <hr />
+      <ul>
+        {toDos.map((item,index)=>(<li key={index}>{item}</li>))}
+      </ul>
     </div>
   );
 }
