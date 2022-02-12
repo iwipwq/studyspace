@@ -1,35 +1,27 @@
-import { useEffect, useState } from "react";
-import keyUrl from "./Key";
-import Movie from "./components/Movie"
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Detail from "./routes/Detail";
+//여기서부터 App은 라우터 담당
+// localhost:3000/movies/123
+// HashRouter 일 경우 localhost:3000/#/이 붙음
+// Switch -> 한번에 하나의 컴포넌트만 렌더링하기 위해 사용
+import Home from "./routes/Home";
 
 function App() {
-  const [loading,setLoading] = useState(true);
-  const [movies, setMovies] = useState([]);
-  const getMovies = async() => {
-    const json = await (await fetch(keyUrl)).json();
-    setMovies(json.data.movies);
-    setLoading(false);
-  } 
-  // const getMovies = async() => {
-  //   const response = await fetch(keyUrl);
-  //   const json = await response.json();
-  //   setMovies(json.data.movies);
-  //   setLoading(false);
-  // }
-  useEffect(()=>{
-    getMovies();
-  },[])
-  console.log(movies)
-  console.log(keyUrl)
   return (
-    <div>
-      {loading ? <h1>Loading...</h1> : <div>{movies.map((movie) =>
-            <Movie key={movie.id} coverImg={movie.medium_cover_image} title={movie.title} summary={movie.summary} genres={movie.genres} />
-          )}
-      </div>
-      }
-    </div>
-  );
+    <Router>
+      <Switch>
+        <Route path="/hello">
+          <h1>Hello</h1>
+        </Route>
+        <Route path="/movie">
+          <Detail />
+        </Route>
+        <Route path="/">
+          <Home/>
+        </Route>
+      </Switch>
+    </Router>
+  )
 }
 
 export default App;
