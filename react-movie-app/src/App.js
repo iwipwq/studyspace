@@ -5,7 +5,7 @@ import Detail from "./routes/Detail";
 // HashRouter 일 경우 localhost:3000/#/이 붙음
 // Switch -> 한번에 하나의 컴포넌트만 렌더링하기 위해 사용
 import Home from "./routes/Home";
-
+// /movie:id -> 리액트라우터에서 제공하는 동적 url
 function App() {
   return (
     <Router>
@@ -13,7 +13,7 @@ function App() {
         <Route path="/hello">
           <h1>Hello</h1>
         </Route>
-        <Route path="/movie">
+        <Route path="/movie/:id">
           <Detail />
         </Route>
         <Route path="/">
