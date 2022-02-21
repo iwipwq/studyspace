@@ -1,0 +1,14 @@
+const food = ["tomato","potato"]
+undefined
+food[0]
+'tomato'
+const tamato = food[0]
+undefined
+const potato = food[1]
+undefined
+const [myFavFood, mySecondFavFood] = food;
+undefined
+myFavFood
+'tomato'
+mySecondFavFood
+'potato'
