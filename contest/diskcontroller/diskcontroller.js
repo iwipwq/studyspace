@@ -9,13 +9,33 @@ function solution(jobs) {
     function getPrev() {
 
     }
+    const sortJobs = []
     const sortSP = []
     const sortPT = []
-    jobs.sort()
-    for (i=0; i<jobs.length; i++) {
-        sortSP.push(jobs[i][0])
-        
+
+    function basicComparator(first, second) {
+        if (first === second) {
+            return 0;
+        } else if (first < second) {
+            return -1;
+        } else {
+            return 1;
+        }
     }
+    
+    function compareNthElements(n, comparatorFunction, reverse) {
+        return function(first, second) {
+            if (reverse === true) {
+                return comparatorFunction(second[n], first[n]);
+            } else {
+                return comparatorFunction(first[n], second[n]);
+            }
+        }
+    }
+
+    jobs.sort(compareNthElements(1, basicComparator,true))
+    jobs.sort(compareNthElements(2, basicComparator,true))
+
     Math.min(sortSP)
     let curr = (jobs) => {
         const startingPoint = []
