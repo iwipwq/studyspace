@@ -25,5 +25,5 @@ console.log(Object.isFrozen(pizza));
 console.log(Object.isFrozen(pizza.topping));
 console.log(Object.isFrozen(pizza.sauce));
 
-pizza.topping.meat = 'chicken';
+pizza.ingredients.topping.meat = 'chicken';
 console.log(pizza);
