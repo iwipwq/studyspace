@@ -8,4 +8,7 @@ function Circle(radius) {
 const circle = new Circle();
 console.log(circle.getDiameter);
 console.log(circle);
-// 100;
+// ƒ () {
+//    return 2 * this.radius;
+//}
+//Circle {radius: 1, getDiameter: ƒ}
