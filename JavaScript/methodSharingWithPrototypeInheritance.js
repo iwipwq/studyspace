@@ -27,8 +27,8 @@ GenCircle.prototype.getArea = function () {
     return Math.PI * this.radius ** 2;
 }
 
-const genCircle1 = GenCircle(1);
-const genCircle2 = GenCircle(2);
+const genCircle1 = new GenCircle(1);
+const genCircle2 = new GenCircle(2);
 //Same method, Share within prototype (inherited)
 console.log(genCircle1.getArea === genCircle2.getArea);
 //true
