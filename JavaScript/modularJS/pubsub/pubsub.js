@@ -1,0 +1,48 @@
+var events = {
+    events: {},
+    on: function(eventName, fn) {
+        this.events[eventName] = this.events[eventName] || [];
+    },
+    off: function(eventName, fn) {
+        for (i=0; i < this.events[eventName].length; i++) {
+            if(this.events[eventName][i] === fn) {
+                this.events[eventName].splice(i,1);
+                break;
+            } 
+        }
+    },
+    emit: function(eventName, data) {
+        if (this.events[eventName]) {
+            this.events[eventName].forEach(function(fn) {
+                fn(data);
+            })
+        }
+    }
+}
+
+//ES6 Class
+class Event {
+    constructor() {
+        this.events = {};
+    }
+
+    on(eventName, fn) {
+        this.events[eventName] = this.events[eventName] || [];
+        this.events[eventName].push(fn);
+    }
+
+    off(eventName, fn) {
+        for (i=0; i<this.event[eventName].length; i++) {
+            if(this.events[eventName][i] === fn) {
+                this.events[eventName].splice(i,1);
+                break;
+            }
+        };
+    }
+
+    emit(eventName, data) {
+        this.events[eventName].forEach(function(fn) {
+            fn(data);
+        });
+    }
+}
