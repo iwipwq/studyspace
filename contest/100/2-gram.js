@@ -1,10 +1,12 @@
 function solve(string) {
-    const splitString = string.split('')
-    const newString = [];
-    splitString.map((char)=> {
-        newString.push(char,char)
+    const splitedStringArr = string.split('')
+    const newStringArr = [];
+    splitedStringArr.forEach((char)=> {
+        newStringArr.push(char,char)
     })
-    splitString.pop()
-    splitString.shift()
-    splitString.join('')
+    newStringArr.pop()
+    newStringArr.shift()
+    for(let i=0;i<newStringArr.length-2;i+=2) {
+        console.log(`${newStringArr[i]} ${newStringArr[i+1]}`)
+    }
 }
