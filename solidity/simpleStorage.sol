@@ -1,15 +1,21 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.8;
 
+// EVM, Ethereum Virtual Machine
+// Avalanche, Fantom, Polygon
+
 contract SimpleStorage {
     // 이 변수는 0으로 초기화 됩니다.
     // 여기서 visibility를 따로 설정해 놓지 않으면 기본 internal입니다.
-    uint256 public favoriteNumber;
+    uint256 favoriteNumber;
+    // uint256 public favoriteNumber;
     // uint256 public favoriteNumberOne;
     // uint256 public favoriteNumberTwo;
     // People public person = People({favoriteNumber: 2, name: "Kim"});
     // People public person1 = People({favoriteNumber: 5, name: "CHAD"});
     // People public person2 = People({favoriteNumber: 7, name: "pepe"});
+
+    mapping(string => uint256) public nameToFavoriteNumber;
 
     struct People {
         uint256 favoriteNumber;
@@ -35,10 +41,15 @@ contract SimpleStorage {
         return (1 + 1);
     }
 
+    // calldata, memory, storage
     function addPerson(string memory _name, uint256 _favoriteNumber) public {
-        // people.push(People(_favoriteNumber, _name));
         // People memory newPerson = People({favoriteNumber: _favoriteNumber, name: _name});
-        People memory newPerson = People(_favoriteNumber, _name);
-        people.push(newPerson);
+        // People memory newPerson = People(_favoriteNumber, _name);
+        // people.push(newPerson);
+        // _name = "cat";
+        people.push(People(_favoriteNumber, _name));
+        nameToFavoriteNumber[_name] = _favoriteNumber;
     }
 }
+
+//0xd9145CCE52D386f254917e481eB44e9943F39138
