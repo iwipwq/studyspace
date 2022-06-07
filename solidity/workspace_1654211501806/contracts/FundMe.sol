@@ -81,6 +81,7 @@ contract FundMe {
 
     modifier onlyOwner {
         require(msg.sender == i_owner, unicode"펀딩 소유자만 인출할 수 있습니다.");
+        // if(msg.sender != i_owner) { revert NotOwner() };
         _;
     }
 
