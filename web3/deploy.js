@@ -1,18 +1,17 @@
 const ethers = require("ethers");
 const fs = require("fs-extra");
+require("dotenv").config();
 
 async function main() {
   // 솔리디티 코드를 컴파일
   // 방법 1. 여기(main)에서 컴파일하기
   // 방법 2. 따로 분리해서 컴파일하기 <- 이걸로 할거임
   // http://127.0.0.1:7545
-  const provider = new ethers.providers.JsonRpcProvider(
-    "http://127.0.0.1:7545"
-  );
-  const wallet = new ethers.Wallet(
-    "2a3c137e648be125443bea64ca3e3a79e6ab0014dcc9b7d72d9ce965d500e9dc",
-    provider
-  );
+  const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
+  // const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+  const encryptedJson = fs.readFileSync("./.encryptedKey.json","utf8");
+  let wallet = new ethers.Wallet.fromEncryptedJsonSync(encryptedJson, process.env.PRIVATE_KEY_PASSWORD);
+  wallet = await wallet.connect(provider);
   const abi = fs.readFileSync("./_SimpleStorage_sol_SimpleStorage.abi", "utf8");
   const binary = fs.readFileSync(
     "./_SimpleStorage_sol_SimpleStorage.bin",
@@ -22,12 +21,13 @@ async function main() {
   console.log("배포중입니다. 기다려주세요...");
   const contract = await contractFactory.deploy(); // 여기서 멈춰! 계약이 배포될때까지 기다리렴
   console.log(contract);
-  const transactionReceipt = await contract.deployTransaction.wait(1);
+  // const transactionReceipt = await contract.deployTransaction.wait(1);
+  await contract.deployTransaction.wait(1);
 
-  console.log("배포 트랜잭션입니다.")
-  console.log(contract.deployTransaction);
-  console.log("트랜잭션 내역입니다.")
-  console.log(transactionReceipt);
+  // console.log("배포 트랜잭션입니다.")
+  // console.log(contract.deployTransaction);
+  // console.log("트랜잭션 내역입니다.")
+  // console.log(transactionReceipt);
 
   // console.log("트랜잭션 데이터만 가지고 배포하기!"); // remix DEPLOY 탭에서 수동으로 트랜잭션을 보내는 것과 같음
   // const nonce = await wallet.getTransactionCount();
@@ -45,6 +45,13 @@ async function main() {
   // await sentTxResponse.wait(1);
   // // console.log(signedTxResponse);
   // console.log(sentTxResponse);
+
+  const currentFavoriteNumber = await contract.retrieve();
+  console.log("좋아하는 숫자", currentFavoriteNumber.toString());
+  const transactionResponse = await contract.store("7");
+  const transactionReceipt = await transactionResponse.wait(1);
+  const updatedFavoriteNumber = await contract.retrieve();
+  console.log(`업데이트 된 좋아하는 숫자: ${updatedFavoriteNumber.toString()}`);
 }
 
 main()
