@@ -1,4 +1,4 @@
-const {ethers} = require("hardhat");
+const {ethers, run} = require("hardhat");
 
 //async main
 async function main() {
@@ -8,6 +8,18 @@ async function main() {
   await simpleStorage.deployed();
   // private key ㅇㄷ? rpc url ㅇㄷ?
   console.log(`이곳에 배포되었습니다: ${simpleStorage.address}`)
+}
+
+async function verify(contractAddress, args) {
+  console.log("계약을 검증하고 있습니다...");
+  try {
+    await run("verify:verify", {
+      address:contractAddress,
+      constructorArguments: args,
+    })
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 // main
