@@ -13,6 +13,7 @@ const {
   networkConfig,
   developmentChains,
 } = require("../helper-hardhat-config");
+const { verify } = require("../utils/verify");
 // const helperConfig = require("../helper-hardhat-config");
 // const networkConfig = helperConfig.networkConfig;
 
@@ -35,12 +36,21 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   // 이제 무슨 일이 일어나냐면...
   // 체인을 바꾸고 싶을때 어떻게 해야 할까요
   // 1. 로컬 호스트 또는 하드햇 네트워크로 이동할 때 모의실험(mock)을 사용할 겁니다.
-
+  const args = [ethUsdPriceFeedAddress];
+  console.log("프라이스피드주소" + args);
   const fundMe = await deploy("FundMe", {
     from: deployer,
-    args: [ethUsdPriceFeedAddress], // 여기에 주소 리스트 입력
+    args: args, // 여기에 주소 리스트 입력
     log: true,
+    waitConfirmations: network.config.blockConfirmations || 1,
   });
+  console.log("배포된 계약",fundMe);
+  // 체인이 개발환경이 아니라면 바로 검증
+  if(!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
+    //검증
+    await verify(fundMe.address, args);
+  }
+
   log("---------------------------------------------------------------");
 };
 // (async function () {});
