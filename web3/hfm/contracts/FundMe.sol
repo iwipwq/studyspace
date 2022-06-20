@@ -8,6 +8,8 @@ pragma solidity ^0.8.8;
 // imports
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 import "./PriceConverter.sol";
+import "hardhat/console.sol";
+
 // Error codes
 error FundMe__NotOwner();
 
@@ -35,11 +37,14 @@ contract FundMe {
 
     //modifier
     modifier onlyOwner() {
-        require(
-            msg.sender == i_owner,
-            unicode"펀딩 소유자만 인출할 수 있습니다."
-        );
-        // if(msg.sender != i_owner) { revert FundMe__NotOwner();}
+        console.log("msg.sender", msg.sender);
+        console.log("i_owner", i_owner);
+        console.log("same?", msg.sender == i_owner);
+        // require(
+        //     msg.sender == i_owner,
+        //     unicode"펀딩 소유자만 인출할 수 있습니다."
+        // );
+        if(msg.sender != i_owner) revert FundMe__NotOwner();
         _;
     }
 
@@ -58,13 +63,13 @@ contract FundMe {
         priceFeed = AggregatorV3Interface(priceFeedAddress);
     }
 
-    receive() external payable {
-        fund();
-    }
+    // receive() external payable {
+    //     fund();
+    // }
 
-    fallback() external payable {
-        fund();
-    }
+    // fallback() external payable {
+    //     fund();
+    // }
 
     /**
      *  @notice 이 함수가 계약에 모금을 해줍니다.
