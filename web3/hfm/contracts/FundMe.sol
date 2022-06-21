@@ -28,18 +28,18 @@ contract FundMe {
     uint256 public constant MINIMUM_USD = 50 * 1e18;
     // uint256 public number;
 
-    address[] public funders;
-    mapping(address => uint256) public addressToAmountFunded;
+    address[] private s_funders;
+    mapping(address => uint256) private s_addressToAmountFunded;
 
-    address public immutable i_owner;
+    address private immutable i_owner;
 
-    AggregatorV3Interface public priceFeed;
+    AggregatorV3Interface public s_priceFeed;
 
     //modifier
     modifier onlyOwner() {
-        console.log("msg.sender", msg.sender);
-        console.log("i_owner", i_owner);
-        console.log("same?", msg.sender == i_owner);
+        // console.log("msg.sender", msg.sender);
+        // console.log("i_owner", i_owner);
+        // console.log("same?", msg.sender == i_owner);
         // require(
         //     msg.sender == i_owner,
         //     unicode"펀딩 소유자만 인출할 수 있습니다."
@@ -60,7 +60,7 @@ contract FundMe {
 
     constructor(address priceFeedAddress) {
         i_owner = msg.sender;
-        priceFeed = AggregatorV3Interface(priceFeedAddress);
+        s_priceFeed = AggregatorV3Interface(priceFeedAddress);
     }
 
     // receive() external payable {
@@ -80,33 +80,63 @@ contract FundMe {
         // 1. 어떻게 이 계약으로 ETH를 보낼까요?
         // number = 5;
         require(
-            msg.value.getConversionRate(priceFeed) >= MINIMUM_USD,
+            msg.value.getConversionRate(s_priceFeed) >= MINIMUM_USD,
             unicode"최소 펀딩금액에 미달합니다."
         );
         // revert 될 경우 이후 액션에서 소모된 가스는 반환됩니다.
-        funders.push(msg.sender);
-        addressToAmountFunded[msg.sender] += msg.value;
+        s_funders.push(msg.sender);
+        s_addressToAmountFunded[msg.sender] += msg.value;
     }
 
-    function withdraw() public onlyOwner {
+    function withdraw() public payable onlyOwner {
         // require(msg.sender == owner, unicode"펀딩 소유자만 인출할 수 있습니다.");
         // for loop
         /* starting index, ending index, step amount*/
         for (
             uint256 funderIndex = 0;
-            funderIndex < funders.length;
+            funderIndex < s_funders.length;
             funderIndex++
         ) {
-            address funder = funders[funderIndex];
-            addressToAmountFunded[funder] = 0;
+            address funder = s_funders[funderIndex];
+            s_addressToAmountFunded[funder] = 0;
         }
         // reset the array
-        funders = new address[](0);
+        s_funders = new address[](0);
         // actually withdraw the funds
         (
             bool callSuccess, /*bytes dataReturned*/
 
         ) = payable(msg.sender).call{value: address(this).balance}("");
         require(callSuccess, unicode"호출 실패");
+    }
+
+    function cheaperWithdraw() public payable onlyOwner {
+        address[] memory funders = s_funders;
+        // mapping은 memory에 들어갈 수 없습니다. 미안해요!
+        for(uint256 funderIndex = 0; funderIndex < funders.length; funderIndex++) {
+            address funder = funders[funderIndex];
+            s_addressToAmountFunded[funder] = 0;
+        }
+
+        s_funders = new address[](0);
+        (bool success, ) = i_owner.call{value: address(this).balance}("");
+        require(success, unicode"호출 실패");
+    }
+
+    //view / pure
+    function getOwner() public view returns(address) {
+        return i_owner;
+    }
+
+    function getFunders(uint256 index) public view returns(address) {
+        return s_funders[index];
+    }
+
+    function getAddressToAmountFunded(address funder) public view returns(uint256) {
+        return s_addressToAmountFunded[funder];
+    }
+
+    function getPriceFeed() public view returns(AggregatorV3Interface) {
+        return s_priceFeed;
     }
 }

@@ -27,7 +27,7 @@ describe("FundMe", function () {
 
   describe("constructor", function () {
     it("aggregator 주소를 알맞게 가지고 있는지", async function () {
-      const response = await fundMe.priceFeed();
+      const response = await fundMe.getPriceFeed();
       assert(response, mockV3Aggregator.address);
     });
   });
@@ -38,14 +38,14 @@ describe("FundMe", function () {
         "최소 펀딩금액에 미달합니다."
       );
     });
-    it("addressToAmountFunded에 주소와 기부자가 맵핑되어 업데이트 되어야 합니다.", async function () {
+    it("s_addressToAmountFunded에 주소와 기부자가 맵핑되어 업데이트 되어야 합니다.", async function () {
       await fundMe.fund({ value: sendValue });
-      const response = await fundMe.addressToAmountFunded(deployer);
+      const response = await fundMe.getAddressToAmountFunded(deployer);
       assert.equal(response.toString(), sendValue.toString());
     });
-    it("funders에 기부자 주소가 들어와야 합니다.", async function () {
+    it("s_funders에 기부자 주소가 들어와야 합니다.", async function () {
       await fundMe.fund({ value: sendValue });
-      const funder = await fundMe.funders(0);
+      const funder = await fundMe.getFunders(0);
       assert.equal(funder, deployer);
     });
   });
@@ -109,11 +109,11 @@ describe("FundMe", function () {
           startingDeployerBalance.add(startingFundMeBalance).toString(),
           endingDeployerBalance.add(gasCost).toString()
         );
-        // 후원자목록(funders 배열) 초기화 확인
-        await expect(fundMe.funders(0)).to.be.reverted;
+        // 후원자목록(s_funders 배열) 초기화 확인
+        await expect(fundMe.getFunders(0)).to.be.reverted;
         // 맵핑값이 0으로 초기화 되었는지 확인
         for (let i = 1; i < 6; i++) {
-          const amountFunded = await fundMe.addressToAmountFunded(
+          const amountFunded = await fundMe.getAddressToAmountFunded(
             accounts[i].address
           );
           assert.equal(amountFunded, 0);
@@ -127,9 +127,51 @@ describe("FundMe", function () {
       console.log(`account0: ${accounts[0].address}`);
       console.log(`account1: ${accounts[1].address}`);
       console.log(`account2: ${accounts[2].address}`);
-      console.log(`fundMe.i_owner(): ${await fundMe.i_owner()}`)
+      console.log(`fundMe.getOwner(): ${await fundMe.getOwner()}`)
       const attackerConnectedContract = await fundMe.connect(attacker);
       await expect(attackerConnectedContract.withdraw()).to.be.revertedWith("FundMe__NotOwner");
     });
+
+    it("cheaperWithdraw 테스트...", async function () {
+      const accounts = await ethers.getSigners();
+      for (let i = 1; i < 6; i++) {
+        // Arrange
+        const fundMeConnectedContract = await fundMe.connect(accounts[i]);
+        await fundMeConnectedContract.fund({ value: sendValue });
+        const startingFundMeBalance = await fundMe.provider.getBalance(
+          fundMe.address
+        );
+        const startingDeployerBalance = await fundMe.provider.getBalance(
+          deployer
+        );
+        // Act
+        const transactionResponse = await fundMe.cheaperWithdraw();
+        const transactionReceipt = await transactionResponse.wait(1);
+        const { effectiveGasPrice, gasUsed } = transactionReceipt;
+        const gasCost = gasUsed.mul(effectiveGasPrice);
+        const endingFundMeBalance = await fundMe.provider.getBalance(
+          fundMe.address
+        );
+        const endingDeployerBalance = await fundMe.provider.getBalance(
+          deployer
+        );
+        // Assert
+        assert(
+          startingDeployerBalance.add(startingFundMeBalance).toString(),
+          endingDeployerBalance.add(gasCost).toString()
+        );
+        // 후원자목록(s_funders 배열) 초기화 확인
+        await expect(fundMe.getFunders(0)).to.be.reverted;
+        // 맵핑값이 0으로 초기화 되었는지 확인
+        for (let i = 1; i < 6; i++) {
+          const amountFunded = await fundMe.getAddressToAmountFunded(
+            accounts[i].address
+          );
+          assert.equal(amountFunded, 0);
+        }
+      }
+    });
+
   });
+
 });
