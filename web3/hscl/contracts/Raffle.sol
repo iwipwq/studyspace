@@ -13,8 +13,16 @@ import "@chainlink/contracts/src/v0.8/interfaces/KeeperCompatibleInterface.sol";
 
 error Raffle__NotEnoughETHEntered();
 error Raffle__TransferFailed();
+error Raffle__NotOpen();
 
 contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface {
+    /* Type declarations */
+    enum RaffleState {
+        OPEN,
+        CALCULATING
+    } // uint256 0 = OPEN, 1 = CALCULATING
+
+
     /* state variables */
     uint256 private immutable i_entranceFee;
     address payable[] private s_players;
@@ -29,6 +37,7 @@ contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface {
     address private s_recentWinner;
     bool private s_isOpen; // to pending, open, closed, calculating
     // bool private s_state; // to pending, open, closed, calculating
+    RaffleState private s_raffleState;
 
     /*Events*/
     event RaffleEnter(address indexed player);
@@ -47,12 +56,16 @@ contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface {
         i_keyHash = keyHash;
         i_subscriptionId = subscriptionId;
         i_callbackGasLimit = callbackGasLimit;
+        s_raffleState = RaffleState.OPEN; //RaffleState(0);
     }
 
     function enterRaffle() public payable {
         // require (msg.value > i_entranceFee, "eth가 충분하지 않습니다!")
-        if (msg.value > i_entranceFee) {
+        if (msg.value < i_entranceFee) {
             revert Raffle__NotEnoughETHEntered();
+        }
+        if (s_raffleState != RaffleState.OPEN) {
+            revert Raffle__NotOpen();
         }
         s_players.push(payable(msg.sender));
         // Emit an event when we update a dynamic array or mapping
@@ -77,6 +90,7 @@ contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface {
         // request random number
         // Once we get it, do someting with it
         // 2 transaction process
+        s_raffleState = RaffleState.CALCULATING;
         uint256 requestId = i_vrfCoordinator.requestRandomWords(
             i_keyHash, //gasLane
             i_subscriptionId,
@@ -94,6 +108,8 @@ contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface {
         uint256 indexOfWinner = randomWords[0] % s_players.length;
         address payable recentWinner = s_players[indexOfWinner];
         s_recentWinner = recentWinner;
+        s_raffleState = RaffleState.OPEN;
+        s_players = new address payable[](0);
         (bool success, ) = recentWinner.call{value: address(this).balance}("");
         // require(success)
         if(!success) revert Raffle__TransferFailed();
