@@ -52,7 +52,10 @@ const {
           await raffle.enterRaffle({ value: raffleEntranceFee });
           await network.provider.send("evm_increaseTime",[interval.toNumber() + 1])
           await network.provider.send("evm_mine",[]);
-          
+          // await network.provider.request({method:"evm_mine", params:[]}); //위와 동일
+          // chainlink keeper로 위장
+          await raffle.performUpkeep([]);
+          await expect(raffle.enterRaffle({value: raffleEntranceFee})).to.be.revertedWith("Raffle__NotOpen");
         });
       });
     });
