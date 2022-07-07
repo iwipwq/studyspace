@@ -104,21 +104,27 @@ const {
         });
       });
 
-      describe("perfromUpkeep", function() {
-        it("checkUpkeep이 true일때만 작동", async function() {
-          await raffle.enterRaffle({value:raffleEntranceFee});
-          await network.provider.send("evm_increaseTime",[interval.toNumber() + 1]);
+      describe("perfromUpkeep", function () {
+        it("checkUpkeep이 true일때만 작동", async function () {
+          await raffle.enterRaffle({ value: raffleEntranceFee });
+          await network.provider.send("evm_increaseTime", [
+            interval.toNumber() + 1,
+          ]);
           await network.provider.send("evm_mine", []);
           const tx = await raffle.performUpkeep([]);
           console.log(tx);
           assert(tx);
-        })
-        it("checkUpkeep이 false를 반환했을때 revert", async function() {
-          await expect(raffle.performUpkeep([])).to.be.revertedWith("Raffle__UpkeepNotNeeded");
-        })
-        it("raffleState, emits, event 를 업데이트 하고 vrfCooridnator를 호출", async function() {
-          await raffle.enterRaffle({value:raffleEntranceFee});
-          await network.provider.send("evm_increaseTime",[interval.toNumber() + 1]);
+        });
+        it("checkUpkeep이 false를 반환했을때 revert", async function () {
+          await expect(raffle.performUpkeep([])).to.be.revertedWith(
+            "Raffle__UpkeepNotNeeded"
+          );
+        });
+        it("raffleState, emits, event 를 업데이트 하고 vrfCooridnator를 호출", async function () {
+          await raffle.enterRaffle({ value: raffleEntranceFee });
+          await network.provider.send("evm_increaseTime", [
+            interval.toNumber() + 1,
+          ]);
           await network.provider.send("evm_mine", []);
           const txResponse = await raffle.performUpkeep([]);
           const txReceipt = await txResponse.wait(1);
@@ -126,16 +132,33 @@ const {
           const raffleState = await raffle.getRaffleState();
           assert(requestId.toNumber() > 0);
           assert(raffleState.toString() == "1");
-        })
-      })
+        });
+      });
 
-      describe("fulfillRandomWords", function() {
-        beforeEach(async function() {
-          await raffle.enterRaffle({value:raffleEntranceFee});
-          await network.provider.send("evm_increaseTime",[interval.toNumber() + 1]);
-          await network.provider.send("evm_mine",[]);
-          
+      describe("fulfillRandomWords", function () {
+        beforeEach(async function () {
+          await raffle.enterRaffle({ value: raffleEntranceFee });
+          await network.provider.send("evm_increaseTime", [
+            interval.toNumber() + 1,
+          ]);
+          await network.provider.send("evm_mine", []);
+        });
+        it("반드시 performUpkeep 이후에 호출되어야 함", async function () {
+          await expect(
+            vrfCoordinatorV2Mock.fulfillRandomWords(0, raffle.address)
+          ).to.be.revertedWith("nonexistent request");
+          await expect(
+            vrfCoordinatorV2Mock.fulfillRandomWords(1, raffle.address)
+          ).to.be.revertedWith("nonexistent request");
+        });
+        it("우승자를 추첨하고, 복권을 리셋하고, 우승자에게 돈을 보내기", async function() {
+          const additionalEntrants = 3;
+          const startAccountIndex = 1; // deployer = 0
+          const accounts = await ethers.getSigners();
+          for(i = startAccountIndex; i < startAccountIndex + additionalEntrants; i++) {
+            const accountConnectedRaffle = raffle.connect(accounts[i]);
+            await accountConnectedRaffle.enterRaffle({ value: raffleEntranceFee });
+          }
         })
-      })
-
+      });
     });
