@@ -2,11 +2,13 @@ class Rabbit {
   ramdomizer = () => {
     return Math.floor(Math.random() * 2) ? 1 : -1;
   };
+
   getRandomInt = (min, max) => {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min;
   };
+
   constructor(min, max) {
     this.max = max;
     this.min = min;
@@ -14,6 +16,7 @@ class Rabbit {
     this.ambushTime = 0;
     this.huntCount = 0;
   }
+
   jump() {
     if (this.currentIndex === this.min) {
       this.currentIndex += 1;
@@ -25,6 +28,7 @@ class Rabbit {
       this.currentIndex = this.currentIndex + this.ramdomizer();
     }
   }
+
   catch(holeNumber) {
     if (holeNumber === this.currentIndex) {
       console.log(`토끼를 잡았습니다!. ${holeNumber} 에서 찾았습니다.`);
@@ -35,6 +39,7 @@ class Rabbit {
     this.jump();
     console.log("여기엔 없군요. 토끼가 도망갔습니다.");
   }
+
   hunt() {
     for (let i = this.min; i <= this.max; i++) {
       this.huntCount += 1;
@@ -67,6 +72,7 @@ class Rabbit {
     }
     this.hunt();
   }
+
   ambush(holeNumber) {
     let ambushHole = holeNumber;
     if (ambushHole == undefined) {
@@ -97,6 +103,51 @@ class Rabbit {
       console.log(`새 토끼를 ${this.currentIndex}번째 구멍에 풀어주었습니다.`);
     }
   }
+
+  huntAndAmbush() {
+    for (let i = 0; i <= this.max; i++) {
+      this.huntCount += 1;
+      if (i === this.currentIndex) {
+        console.log(
+          `Gotcha! ${this.currentIndex} 번째 구멍에서 ${this.huntCount} 번째 시도 끝에 잡았습니다!`
+        );
+        this.huntCount = 0;
+        this.currentIndex = this.getRandomInt(this.min, this.max);
+        console.log(
+          `새 토끼를 ${this.currentIndex}번째 구멍에 풀어주었습니다.`
+        );
+        return;
+      } else {
+        this.jump();
+        console.log(
+          `${i}번재 구멍을 조사했으나, 토끼가 ${this.currentIndex}번째 구멍으로 도망갔습니다.(${this.huntCount}번째 시도)`
+        );
+        if (i === this.currentIndex) {
+          console.log(
+            `조사한 ${i}번째 구멍을 한번 더 조사했더니 토끼를 잡았습니다!`
+          );
+          this.huntCount = 0;
+          this.currentIndex = this.getRandomInt(this.min, this.max);
+          console.log(
+            `새 토끼를 ${this.currentIndex}번째 구멍에 풀어주었습니다.`
+          );
+          return;
+        }
+        this.jump();
+        if (i === this.currentIndex) {
+          console.log(`이런 토끼와 엇갈렸습니다!!`);
+        }
+      }
+    }
+    if (this.huntCount === 10000) {
+      console.log(
+        `10000번 시도했지만 토끼를 찾지못했습니다... 카운트를 초기화합니다.`
+      );
+      this.huntCount = 0;
+      return;
+    }
+  }
+
   get position() {
     return `토끼는 ${this.currentIndex} 번째 구멍에 있습니다.`;
   }
