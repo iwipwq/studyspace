@@ -146,6 +146,7 @@ class Rabbit {
       this.huntCount = 0;
       return;
     }
+    this.huntAndAmbush();
   }
 
   get position() {
