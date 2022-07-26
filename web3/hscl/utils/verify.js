@@ -8,7 +8,7 @@ const verify = async (contractAddress, args) => {
       constructorArguments: args,
     });
   } catch (error) {
-    if (error.message.toLowerCase().includes("already verifide")) {
+    if (error.message.toLowerCase().includes("already verified")) {
       console.log("이미 검증된 계약입니다.");
     } else {
       console.log(error);
