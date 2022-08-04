@@ -1,0 +1,63 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "requestId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "words",
+						"type": "uint256[]"
+					}
+				],
+				"name": "rawExternalContractFunction",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/5_Bridge.sol": "Bridge"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/5_Bridge.sol": {
+			"keccak256": "0xa4b27deb7d54e523d9dd01fb4d633eb2c48ed6840f96d18ecac2f079ab353d38",
+			"urls": [
+				"bzz-raw://4a8268fdc9fa1f7137adfc6628a6a18ce7d7df1866349ee5d0d25443a5f48402",
+				"dweb:/ipfs/QmSGtxyChqvYBWHGKvGoyujELkGNDXRjmYDWpAbEoQ4f2U"
+			]
+		}
+	},
+	"version": 1
+}

@@ -1,0 +1,64 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "argument",
+						"type": "uint256"
+					}
+				],
+				"name": "requestWords",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "requestId",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/7_IMock.sol": "IMock"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/7_IMock.sol": {
+			"keccak256": "0x590f11a33e1a4a20e168049d8c682972f4b7c4f5612058f5463d6a08eaf9f840",
+			"urls": [
+				"bzz-raw://6588016686baf46fae66213d8cf251c4660de5eb65ddd52050afc74ecdd51d16",
+				"dweb:/ipfs/QmaCEV8orsQ96k8PLP7q9mFARwf5dWavcSw7KkdzxW6MUs"
+			]
+		}
+	},
+	"version": 1
+}

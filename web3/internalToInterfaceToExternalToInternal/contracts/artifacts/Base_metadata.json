@@ -1,0 +1,172 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "mockAddress",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "randomWord",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "requestId",
+						"type": "uint256"
+					}
+				],
+				"name": "BaseToMockSuccess",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "i_argument",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "i_mock",
+				"outputs": [
+					{
+						"internalType": "contract IMock",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "internalRequest",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "requestId",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "requestId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "words",
+						"type": "uint256[]"
+					}
+				],
+				"name": "rawExternalContractFunction",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "s_randomWord",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "s_requestId",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/4_Base.sol": "Base"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/4_Base.sol": {
+			"keccak256": "0xfd6b8d0436cbee412d54750267c1c9d6e4b57d162bd94534573df007b2e3a48a",
+			"urls": [
+				"bzz-raw://cd511a2ac8b232d1768f8ddd17a7d1f25efa290651199ff7c2eb788fea58889b",
+				"dweb:/ipfs/QmUvtnD2x4KzK4iJvqtCJBEqPAUvRr7AFaubedwVnf6XQd"
+			]
+		},
+		"contracts/5_Bridge.sol": {
+			"keccak256": "0xa4b27deb7d54e523d9dd01fb4d633eb2c48ed6840f96d18ecac2f079ab353d38",
+			"urls": [
+				"bzz-raw://4a8268fdc9fa1f7137adfc6628a6a18ce7d7df1866349ee5d0d25443a5f48402",
+				"dweb:/ipfs/QmSGtxyChqvYBWHGKvGoyujELkGNDXRjmYDWpAbEoQ4f2U"
+			]
+		},
+		"contracts/7_IMock.sol": {
+			"keccak256": "0x590f11a33e1a4a20e168049d8c682972f4b7c4f5612058f5463d6a08eaf9f840",
+			"urls": [
+				"bzz-raw://6588016686baf46fae66213d8cf251c4660de5eb65ddd52050afc74ecdd51d16",
+				"dweb:/ipfs/QmaCEV8orsQ96k8PLP7q9mFARwf5dWavcSw7KkdzxW6MUs"
+			]
+		}
+	},
+	"version": 1
+}
