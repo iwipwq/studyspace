@@ -1,4 +1,4 @@
-import create from 'zustand/react';
+import create from 'zustand';
 import logo from './logo.svg';
 import './App.css';
 
@@ -11,6 +11,7 @@ function Counter() {
   const { count, inc } = useStore()
   return(
     <div className='counter'>
+      <p>카운터</p>
       <span>{count}</span>
       <button onClick={inc}>+1</button>
     </div>
@@ -25,6 +26,9 @@ function App() {
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
+        <div className='container'>
+        <Counter />
+      </div>
         <a
           className="App-link"
           href="https://reactjs.org"
@@ -34,9 +38,7 @@ function App() {
           Learn React
         </a>
       </header>
-      <div className='container'>
-        <Counter />
-      </div>
+
     </div>
   );
 }
