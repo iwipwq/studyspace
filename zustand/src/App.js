@@ -27,7 +27,14 @@ function Counter() {
 function Dogo() {
   const paw1 = useDogStore.getState().paw
   const unsub1 = useDogStore.subscribe(console.log);
-  useDogStore.setState({paw: false})
+  
+  const setPawToFalse = function () {
+    useDogStore.setState({paw: false})
+  }
+
+  const setPawToTrue = function () {
+    useDogStore.setState({paw: true})
+  }
 
   unsub1()
 
@@ -35,13 +42,26 @@ function Dogo() {
     console.log("des")
     useDogStore.destroy()
     console.log("paw?",useDogStore.getState().paw);
-  } 
+  }
+
+  const subscriber = function () {
+    console.log("sub")
+    useDogStore.subscribe(console.log);
+  }
+
+  const getDogState = function () {
+    console.log("state",useDogStore.getState())
+  }
 
   const paw = useDogStore((state) =>state.paw)
   return (
     <div>
       <p>{paw.toString()}</p>
-      <button onClick={destoryer}>destory and listen</button>
+      <button onClick={getDogState}>get State</button>
+      <button onClick={destoryer}>destory state listener</button>
+      <button onClick={subscriber}>subscribe state</button>
+      <button onClick={setPawToFalse}>Paw to False</button>
+      <button onClick={setPawToTrue}>Paw to True</button>
     </div>
   )
 }
