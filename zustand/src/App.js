@@ -1,8 +1,11 @@
 import create from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 import shallow from 'zustand/shallow'
+import omit from "lodash-es/omit"
+
 import logo from "./logo.svg";
 import "./App.css";
+import { set } from "lodash-es";
 
 const useCounterStore = create((set) => ({
   count: 1,
@@ -16,6 +19,8 @@ const useDogStore = create(() => ({
   snout: true,
   fur: true,
   bark: "woof",
+  deleteEverything: () => set({}, true),
+  deleteFur: () => set((state) => omit(state,["fur"]), true)
 }));
 
 const usePizzaStore = create(
